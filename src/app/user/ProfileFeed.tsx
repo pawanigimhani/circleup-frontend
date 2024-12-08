@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -9,7 +9,9 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input"
 import Image from "next/image";
 import axios from "axios";
 
@@ -41,6 +43,9 @@ const FeedComponent = () => {
     const userId = "6753cc74434b01335f093c19"; // hard coded id for now
     const [selectedComments, setSelectedComments] = useState<Comment[]>([]);
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [caption, setCaption] = React.useState<string>("");
+    const [selectedFeedId, setSelectedFeedId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchFeedImages = async () => {
@@ -61,6 +66,35 @@ const FeedComponent = () => {
         setSelectedComments(comments);
         setIsCommentsModalOpen(true);
     };
+
+    const openCaptionModal = (id: string) => {
+        setSelectedFeedId(id);
+        setIsOpen(true);
+    }
+
+    const addCaption = async () => {
+        try {
+            await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/api/${userId}/feed/caption`, {
+                feedId: selectedFeedId,
+                caption: caption,
+            });
+            setFeedImages((prevFeedImage) => {
+                return prevFeedImage.map((image) => {
+                    if (image.id === selectedFeedId) {
+                        return {
+                            ...image,
+                            caption: caption,
+                        };
+                    }
+                    return image;
+                });
+            });
+            setIsOpen(false);
+            setCaption("");
+        } catch (error: any) {
+            console.log('Error adding caption:', error);
+        }
+    }
 
     return (
         <div>
@@ -124,12 +158,20 @@ const FeedComponent = () => {
                                 <span className="text-white text-sm sm:text-xs lg:text-sm">
                                     {feedImage.comments.length}
                                 </span>
+                                <Button
+                                    variant={null}
+                                    role="save"
+                                    size="sm"
+                                    className="flex items-center justify-center gap-2"
+                                    onClick={() => openCaptionModal(feedImage.id)}
+                                >
+                                    <MoreVertical size={32} color="#ffffff" className="sm:w-5 sm:h-5 lg:w-7 lg:h-7" />
+                                </Button>
                             </div>
                         </div>
                     </div>
                 </div>
             ))}
-
             <Dialog open={isCommentsModalOpen} onOpenChange={setIsCommentsModalOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -157,6 +199,41 @@ const FeedComponent = () => {
                             <p className="text-sm text-gray-500">No comments yet.</p>
                         )}
                     </div>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="mb-2">Add a Caption</DialogTitle>
+                        <DialogDescription>
+                            Add a caption to your image to give it more context.<br />
+                            (Maximum 15 characters.)
+                        </DialogDescription>
+                        <div className="flex flex-wrap">
+                            <Input
+                                type="text"
+                                placeholder="Add a caption"
+                                className="w-full mb-4"
+                                value={caption}
+                                onChange={(e) => {
+                                    const maxLength = 15;
+                                    let newCaption = e.target.value.slice(0, maxLength);
+                                    setCaption(newCaption);
+                                }
+                                }
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Backspace') {
+                                        setCaption((prevCaption) => prevCaption.slice(0, -1));
+                                    }
+                                }
+                                }
+                            />
+                            <Button
+                                className="w-auto bg-black text-gray-200" onClick={() => addCaption()}>
+                                Add Caption
+                            </Button>
+                        </div>
+                    </DialogHeader>
                 </DialogContent>
             </Dialog>
         </div>
