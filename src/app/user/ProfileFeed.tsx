@@ -36,10 +36,27 @@ interface FeedImage {
     comments: Comment[];
 }
 
-const FeedComponent = () => {
-    const [feedImages, setFeedImages] = useState<FeedImage[]>([]);
+const formatCount = (count: number) => {
+    if (count < 1000) {
+        return count.toString();
+    } else if (count < 1000000) {
+        if (count % 1000 === 0) {
+            return (count / 1000) + 'K';
+        } else {
+            return (count / 1000).toFixed(1) + 'K';
+        }
+    } else {
+        if (count % 1000000 === 0) {
+            return (count / 1000000) + 'M';
+        } else {
+            return (count / 1000000).toFixed(1) + 'M';
+        }
+    }
+};
 
-    const [isLoading, setIsLoading] = useState(true);
+const FeedComponent = () => {
+
+    const [feedImages, setFeedImages] = useState<FeedImage[]>([]);
     const userId = "6753cc74434b01335f093c19"; // hard coded id for now
     const [selectedComments, setSelectedComments] = useState<Comment[]>([]);
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
@@ -57,7 +74,6 @@ const FeedComponent = () => {
             } catch (error: any) {
                 console.error("Error fetching feed images:", error);
             }
-            setIsLoading(false);
         };
         fetchFeedImages();
     }, [userId]);
@@ -141,7 +157,7 @@ const FeedComponent = () => {
                                     />
                                 </Button>
                                 <span className="text-white text-sm sm:text-xs lg:text-sm">
-                                    {feedImage.likeCount}
+                                    {formatCount(feedImage.likeCount)}
                                 </span>
                                 <Button
                                     variant={null}
