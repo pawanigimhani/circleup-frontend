@@ -169,9 +169,9 @@ export default function HomePage() {
 
   return (
     <div className="flex justify-center">
-      <div className="w-1/2 p-4 space-y-6 overflow-y-auto h-screen">
+      <div className="w-1/2 p-4 space-y-6 overflow-y-auto h-screen mt-1">
         {feedData.map((post) => (
-          <Card key={post.id} className="border border-gray-200 shadow-sm">
+          <Card key={post.id} className="border border-gray-200 shadow-sm bg-slate-100">
             <CardHeader className="flex items-center space-x-4 p-4">
               <div className="flex flex-row items-center justify-center gap-x-2">
                 <Avatar className="h-10 w-10">

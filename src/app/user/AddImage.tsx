@@ -36,9 +36,12 @@ const AddButton = () => {
             }}
         >
             {({ open }) => (
-                <Button onClick={() => open()}>
+                <div className='flex justify-center mt-10'>
+                <Button
+                 onClick={() => open()}>
                     <BiSolidPlusSquare />
                 </Button>
+                </div>
             )}
         </CldUploadWidget>
     );

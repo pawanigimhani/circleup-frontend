@@ -27,7 +27,7 @@ const Navbar = () => {
         fetchUser();
     }, [userId]);
     return (
-        <nav className="w-full bg-slate-200 shadow-md p-1">
+        <nav className="w-full bg-slate-900 shadow-md p-1">
             <div className="container mx-auto flex items-center justify-between">
                 <Link href="/" className="flex items-center">
                     <Image
@@ -41,8 +41,8 @@ const Navbar = () => {
                 {user ? (
                 <div className="flex items-center space-x-4">
                     <div className="hidden md:flex flex-col text-right">
-                        <span className="font-medium text-gray-900">{user.name}</span>
-                        <span className="text-sm text-gray-500">@{user.username}</span>
+                        <span className="font-medium text-white">{user.name}</span>
+                        <span className="text-sm text-slate-400">@{user.username}</span>
                     </div>
                     <Link href="/user">
                         <Avatar className="h-10 w-10">

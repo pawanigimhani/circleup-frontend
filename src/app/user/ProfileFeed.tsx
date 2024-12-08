@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Heart, MessageCircle, MoreVertical } from "lucide-react";
+import { Heart, MessageCircle, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -112,10 +112,10 @@ const FeedComponent = () => {
         }
     }
     return (
-        <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 m-10">
             {feedImages.map((feedImage) => (
                 <div key={feedImage.id}>
-                    <div className="relative flex flex-col justify-end items-center overflow-hidden w-[345px] h-auto lg:h-auto lg:w-[345px] rounded-[40px] mx-auto  my-4">
+                    <div className="relative flex flex-col justify-end items-center overflow-hidden w-[345px] h-auto lg:h-auto lg:w-[345px] rounded-[40px] mx-auto my-1">
                         <Image
                             src={feedImage.imageUrl}
                             alt="Background Image"
@@ -127,23 +127,23 @@ const FeedComponent = () => {
                         />
                         <div className="absolute z-10 grid grid-cols-6 items-center justify-center w-full bg-gradient-to-t from-black to-transparent rounded-b-[40px]">
                             <div className="col-span-4 flex flex-start items-center justify-start pl-4">
-                                <Avatar className="w-14 h-14 sm:w-10 sm:h-10 lg:w-14 lg:h-14 border-2 border-white mr-3">
-                                    <AvatarImage
-                                        src={feedImage.user.image ?? ""}
-                                        alt={feedImage.user.name ?? "User"}
-                                    />
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col items-start justify-center">
-                                    <span className="text-white text-xs lg:text-base font-normal">
-                                        {feedImage.user.name}
-                                    </span>
+                                <div className="flex flex-row items-center justify-center">                               
+                                <Button
+                                    variant={null}
+                                    role="save"
+                                    size="sm"
+                                    className="flex items-center justify-center gap-2"
+                                    onClick={() => openCaptionModal(feedImage.id)}
+                                >
+                                    <PenSquare size={32} color="#ffffff" className="sm:w-5 sm:h-5 lg:w-7 lg:h-7" />
+                                </Button>                           
                                     <p className="text-xs italic font-medium text-slate-200">
                                         {feedImage.caption ?? "No caption"}
                                     </p>
                                 </div>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-2 col-span-2 pr-4">
+                                <div className="flex flex-row items-center justify-center">
                                 <Button
                                     variant={null}
                                     size="sm"
@@ -158,6 +158,8 @@ const FeedComponent = () => {
                                 <span className="text-white text-sm sm:text-xs lg:text-sm">
                                     {formatCount(feedImage.likeCount)}
                                 </span>
+                                </div>
+                                <div className="flex flex-row items-center justify-center">
                                 <Button
                                     variant={null}
                                     size="sm"
@@ -173,15 +175,7 @@ const FeedComponent = () => {
                                 <span className="text-white text-sm sm:text-xs lg:text-sm">
                                     {feedImage.comments.length}
                                 </span>
-                                <Button
-                                    variant={null}
-                                    role="save"
-                                    size="sm"
-                                    className="flex items-center justify-center gap-2"
-                                    onClick={() => openCaptionModal(feedImage.id)}
-                                >
-                                    <MoreVertical size={32} color="#ffffff" className="sm:w-5 sm:h-5 lg:w-7 lg:h-7" />
-                                </Button>
+                                </div>
                             </div>
                         </div>
                     </div>
