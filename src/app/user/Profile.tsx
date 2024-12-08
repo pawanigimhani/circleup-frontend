@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
 import { User } from "@/lib/types";
 import axios from 'axios';
-import { useParams } from "next/navigation";
 
 interface CloudinaryUploadWidgetInfo {
     secure_url: string;
@@ -15,7 +14,7 @@ interface CloudinaryUploadWidgetInfo {
 
 const Profile = () => {
     const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
-    const userId = "6753cc74434b01335f093c19"; // hard coded id for now
+    const userId = "675598555d7a00d7fdf154ee"; // hard coded id for now
     const [user, setUser] = useState<User | undefined>(undefined);
 
     useEffect(() => {
@@ -73,7 +72,7 @@ const Profile = () => {
             {user && (
                 <div>
                     <Avatar>
-                        <AvatarImage src={profileImage || user.image || ""} alt={user.name || "User"} />
+                        <AvatarImage src={profileImage || user.image || "https://res.cloudinary.com/dcyqrcuf3/image/upload/v1711878461/defaultImages/default-profile-image_grcgcd.png"} alt={user.name || "User"} />
                     </Avatar>
                     <h1>{user.name || "User"}</h1>
                 </div>

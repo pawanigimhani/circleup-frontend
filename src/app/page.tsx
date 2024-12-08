@@ -77,7 +77,7 @@ const formSchema = z.object({
 export default function HomePage() {
 
   const [feedData, setFeedData] = React.useState<FeedImage[]>([]);
-  const sessionUserId = "6753cc74434b01335f093c19"; // hard coded id for now
+  const sessionUserId = "675598555d7a00d7fdf154ee"; // hard coded id for now
   const [isLikingMap, setIsLikingMap] = React.useState<Record<string, boolean>>({});
   const [selectedComments, setSelectedComments] = React.useState<Comment[]>([]);
   const [isCommentsModalOpen, setIsCommentsModalOpen] = React.useState(false);
@@ -131,7 +131,7 @@ export default function HomePage() {
     }
   }
 
-  const openCommentsModal = (comments: Comment[], id:string) => {
+  const openCommentsModal = (comments: Comment[], id: string) => {
     setSelectedComments(comments);
     setIsCommentsModalOpen(true);
     setSelectedFeedId(id);
@@ -168,16 +168,18 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <div className="w-1/2 p-4 space-y-6 overflow-y-auto h-screen">
         {feedData.map((post) => (
           <Card key={post.id} className="border border-gray-200 shadow-sm">
             <CardHeader className="flex items-center space-x-4 p-4">
-              <Avatar className="h-10 w-10">
-                <img src={post.user.image || ''} alt={`${post.user.name}'s profile`} />
-              </Avatar>
-              <div>
-                <p className="font-bold">{post.user.name}</p>
+              <div className="flex flex-row items-center justify-center gap-x-2">
+                <Avatar className="h-10 w-10">
+                  <img src={post.user.image || ''} alt={`${post.user.name}'s profile`} />
+                </Avatar>
+                <div>
+                  <p className="font-bold">{post.user.name}</p>
+                </div>
               </div>
               <div className="ml-auto text-sm text-gray-500">
                 {formatDistanceToNow(post.createdAt, { addSuffix: true })}
@@ -189,45 +191,51 @@ export default function HomePage() {
                 alt={`Post by ${post.user.name}`}
                 className="w-full h-auto rounded-lg"
               />
-              {post.caption && (
-                <p className="mt-2 text-sm text-gray-700">{post.caption}</p>
-              )}
             </CardContent>
-            <CardFooter className="flex items-center space-x-4 p-4">
-              <div className="pl-0">
-                <Button
-                  variant={null}
-                  role="heart"
-                  size="sm"
-                  className="flex items-center justify-center gap-2 hover:scale-110 transform transition duration-500"
-                  onClick={() => handleLike(post.id, post.likedUserIds != null && post.likedUserIds.includes(sessionUserId), sessionUserId)}
-                  disabled={isLikingMap[post.id]}
-                >
-                  {post.likedUserIds != null && post.likedUserIds.includes(sessionUserId) ? (
-                    <Heart fill="#cb1a1a" strokeWidth={0} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6 " />
-                  ) : (
-                    <Heart color="#cb1a1a" strokeWidth={2} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6 " />
+            <CardFooter className="flex items-center justify-between">
+                <div>
+                  {post.caption && (
+                    <p className="mt-4 text-base text-gray-700">{post.caption}</p>
                   )}
-                </Button>
-              </div>
-              <span className="text-slate-600 text-sm sm:text-xs lg:text-sm">{formatCount(post.likeCount)}</span>
-              <div>
-                <Button
-                  variant={null}
-                  size="sm"
-                  className="flex items-center justify-center gap-2 hover:scale-110 transform transition duration-500"
-                  onClick={() => openCommentsModal(post.comments, post.id)}
-                >
-                  <MessageCircle
-                    color="#cb1a1a"
-                    strokeWidth={2}
-                    className="sm:w-5 sm:h-5 lg:w-6 lg:h-6"
-                  />
-                </Button>
-                <span className="text-slate-600 text-sm sm:text-xs lg:text-sm">
-                  {post.comments.length}
-                </span>
-              </div>
+                </div>
+                <div className="flex flex-col items-end space-y-2">
+                  <div className="flex flex-row items-center justify-center">
+                    <div className="pl-0">
+                      <Button
+                        variant={null}
+                        role="heart"
+                        size="sm"
+                        className="flex items-center justify-center gap-2 hover:scale-110 transform transition duration-500"
+                        onClick={() => handleLike(post.id, post.likedUserIds != null && post.likedUserIds.includes(sessionUserId), sessionUserId)}
+                        disabled={isLikingMap[post.id]}
+                      >
+                        {post.likedUserIds != null && post.likedUserIds.includes(sessionUserId) ? (
+                          <Heart fill="#cb1a1a" strokeWidth={0} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6 " />
+                        ) : (
+                          <Heart color="#cb1a1a" strokeWidth={2} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6 " />
+                        )}
+                      </Button>
+                    </div>
+                    <span className="text-slate-600 text-sm sm:text-xs lg:text-sm">{formatCount(post.likeCount)}</span>
+                  </div>
+                  <div className="flex flex-row items-center justify-center">
+                    <Button
+                      variant={null}
+                      size="sm"
+                      className="flex items-center justify-center gap-2 hover:scale-110 transform transition duration-500"
+                      onClick={() => openCommentsModal(post.comments, post.id)}
+                    >
+                      <MessageCircle
+                        color="#cb1a1a"
+                        strokeWidth={2}
+                        className="sm:w-5 sm:h-5 lg:w-6 lg:h-6"
+                      />
+                    </Button>
+                    <span className="text-slate-600 text-sm sm:text-xs lg:text-sm">
+                      {post.comments.length}
+                    </span>
+                  </div>
+                </div>
             </CardFooter>
           </Card>
         ))}
@@ -238,24 +246,24 @@ export default function HomePage() {
             <DialogTitle>Comments</DialogTitle>
           </DialogHeader>
           <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="text"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="Your Comment Here." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit"> Add Comment
-                </Button>
-              </form>
-            </Form>
-            <Separator />
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="text"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Your Comment Here." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit"> Add Comment
+              </Button>
+            </form>
+          </Form>
+          <Separator />
           <div className="flex flex-col space-y-4">
             {selectedComments.length > 0 ? (
               selectedComments.map((comment) => (

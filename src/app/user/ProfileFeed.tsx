@@ -57,7 +57,7 @@ const formatCount = (count: number) => {
 const FeedComponent = () => {
 
     const [feedImages, setFeedImages] = useState<FeedImage[]>([]);
-    const userId = "6753cc74434b01335f093c19"; // hard coded id for now
+    const userId = "675598555d7a00d7fdf154ee"; // hard coded id for now
     const [selectedComments, setSelectedComments] = useState<Comment[]>([]);
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
     const [isOpen, setIsOpen] = React.useState(false);
@@ -111,7 +111,6 @@ const FeedComponent = () => {
             console.log('Error adding caption:', error);
         }
     }
-
     return (
         <div>
             {feedImages.map((feedImage) => (
