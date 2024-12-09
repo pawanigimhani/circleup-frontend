@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react'
 import AddButton from './AddImage'
 import Profile from './Profile'
